@@ -1,3 +1,4 @@
+// backend/server.js
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
@@ -36,7 +37,7 @@ app.get("/", (req, res) => {
 })
 
 // Rutas
-app.use("/api", apiRoutes)
+app.use("/", apiRoutes)
 
 
 // Manejo de errores global
