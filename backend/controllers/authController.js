@@ -1,3 +1,4 @@
+// backend/controllers/authController.js
 import bcrypt from 'bcryptjs';
 import { supabase } from '../db.js';
 import { generateToken } from '../middleware/auth.js';

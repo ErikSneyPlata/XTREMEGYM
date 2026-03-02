@@ -1,6 +1,15 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-powergym-key';
+// 🔴 Fix: fallar en arranque si JWT_SECRET no está definido en .env
+// Antes: usaba 'super-secret-powergym-key' como fallback público — cualquiera
+// podría forjar tokens válidos conociendo ese string.
+if (!process.env.JWT_SECRET) {
+  throw new Error(
+    '❌ JWT_SECRET no está definido. Agrega JWT_SECRET=<clave-segura> en tu .env'
+  );
+}
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];

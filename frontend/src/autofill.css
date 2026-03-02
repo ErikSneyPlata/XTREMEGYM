@@ -1,0 +1,22 @@
+/* ─── Detección de autocompletado del navegador ──────────────────────────────
+   Cuando Chrome/Safari rellena un campo automáticamente, dispara esta
+   animación. El onAnimationStart en React la detecta y activa isFocused.
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes onAutoFillStart {
+  from {}
+  to {}
+}
+
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.001s;
+  /* Mantener el estilo oscuro — el autofill por defecto pone fondo amarillo */
+  -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+  -webkit-text-fill-color: #f1f5f9 !important;
+  caret-color: #f1f5f9;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+  -webkit-text-fill-color: #f1f5f9 !important;
+}
