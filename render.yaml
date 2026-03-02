@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gym-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: SUPABASE_URL
+        value: https://apfpyxehhfkowmrwjqbw.supabase.co
+      - key: SUPABASE_KEY
+        sync: false   # ← lo ingresas manualmente en el dashboard de Render
+      - key: JWT_SECRET
+        sync: false   # ← lo ingresas manualmente en el dashboard de Render
+      - key: FRONTEND_URL
+        sync: false   # ← lo ingresas después de desplegar Vercel
+    healthCheckPath: /health
