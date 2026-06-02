@@ -1,4 +1,4 @@
-# 📊 Esquema de Base de Datos - XTREMEGYM
+de# 📊 Esquema de Base de Datos - XTREMEGYM
 
 ## Descripción General
 Este documento contiene la estructura completa de la base de datos para el sistema de gestión de gimnasio XTREMEGYM, extraída del análisis de los controladores del proyecto.
@@ -295,3 +295,108 @@ Actualizar `db.js` para usar `pg` o `sequelize` en lugar de Supabase.
 
 **Última actualización**: 2026-06-02
 **Generado desde análisis de controladores del proyecto**
+
+
+```
+
+-- 1. TABLA: users (Clientes/Miembros)
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  full_name VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  email VARCHAR(255),
+  dni VARCHAR(20) UNIQUE,
+  status VARCHAR(50) DEFAULT 'inactive' CHECK (status IN ('active', 'warning', 'expired', 'inactive')),
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+-- 2. TABLA: admins (Administradores)
+CREATE TABLE admins (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255),
+  role VARCHAR(50) DEFAULT 'admin',
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 3. TABLA: membership_plans (Planes de Membresía)
+CREATE TABLE membership_plans (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  duration_days INTEGER NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 4. TABLA: user_memberships (Membresías de Usuarios)
+CREATE TABLE user_memberships (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  plan_id UUID NOT NULL REFERENCES membership_plans(id),
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'expired')),
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 5. TABLA: payments (Pagos)
+CREATE TABLE payments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  amount DECIMAL(10, 2) NOT NULL,
+  payment_method VARCHAR(50) NOT NULL CHECK (payment_method IN ('cash', 'card', 'transfer')),
+  payment_type VARCHAR(50) NOT NULL,
+  reference_id UUID,
+  created_by UUID REFERENCES admins(id),
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 6. TABLA: check_ins (Check-ins/Asistencias)
+CREATE TABLE check_ins (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type VARCHAR(50),
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 7. TABLA: inventory (Inventario)
+CREATE TABLE inventory (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  quantity INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+-- 8. TABLA: sales (Ventas)
+CREATE TABLE sales (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  item_id UUID REFERENCES inventory(id),
+  quantity_sold INTEGER NOT NULL,
+  amount DECIMAL(10, 2) NOT NULL,
+  created_by UUID REFERENCES admins(id),
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 9. TABLA: settings (Configuración)
+CREATE TABLE settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  key VARCHAR(255) UNIQUE NOT NULL,
+  value TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+-- Índices para optimización
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_users_dni ON users(dni);
+CREATE INDEX idx_user_memberships_user_id ON user_memberships(user_id);
+CREATE INDEX idx_user_memberships_status ON user_memberships(status);
+CREATE INDEX idx_payments_user_id ON payments(user_id);
+CREATE INDEX idx_check_ins_user_id ON check_ins(user_id);
+CREATE INDEX idx_check_ins_created_at ON check_ins(created_at);
+
+```
