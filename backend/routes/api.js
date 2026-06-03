@@ -86,11 +86,16 @@ router.get("/checkin-history", checkinController.getCheckinHistory);
 router.post("/checkins", checkinController.createCheckin);
 
 // Clients
-router.get("/clients", clientController.getClients);
-router.post("/clients", clientController.createClient);
-router.put("/clients/:id", clientController.updateClient);
-router.get("/clients/:id/stats", clientController.getClientStats);
-router.get('/counts', clientController.getClientCounts);
+router.get('/clients/counts',                    authenticateToken, clientController.getClientCounts);
+router.get('/clients',                           authenticateToken, clientController.getClients);
+router.post('/clients',                          authenticateToken, clientController.createClient);
+router.put('/clients/:id',                       authenticateToken, clientController.updateClient);
+router.delete('/clients/:id',                    authenticateToken, clientController.deleteClient);           // NUEVO
+router.get('/clients/:id/stats',                 authenticateToken, clientController.getClientStats);
+router.post('/clients/:id/cancel-membership',    authenticateToken, clientController.cancelMembership);       // NUEVO
+router.post('/clients/:id/register-membership',  authenticateToken, clientController.registerClientMembership); // NUEVO
+
+
 
 // Memberships
 router.get("/plans", membershipController.getPlans);
