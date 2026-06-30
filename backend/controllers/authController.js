@@ -37,19 +37,37 @@ export const login = async (req, res) => {
   }
 };
 
-export const createAdmin = async (req, res) => {
+export const setupAdmin = async (req, res) => {
+  console.log("SETUP ADMIN EJECUTÁNDOSE");
   const { username, password, full_name } = req.body;
 
-  try {
-    const password_hash = await bcrypt.hash(password, 10);
-    const { data, error } = await supabase
-      .from('admins')
-      .insert([{ username, password_hash, full_name }])
-      .select();
+  // ¿Ya existe algún admin?
+  const { count } = await supabase
+    .from("admins")
+    .select("*", { count: "exact", head: true });
 
-    if (error) return res.status(400).json({ error: error.message });
-    res.status(201).json(data[0]);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+  if (count > 0) {
+    return res.status(403).json({
+      error: "El administrador inicial ya fue creado."
+    });
   }
+
+  const password_hash = await bcrypt.hash(password, 10);
+
+  const { data, error } = await supabase
+    .from("admins")
+    .insert([{
+      username,
+      password_hash,
+      full_name,
+      role: "admin"
+    }])
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.status(201).json(data);
 };

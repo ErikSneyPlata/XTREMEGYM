@@ -73,7 +73,7 @@ router.post('/public/register', registerLimiter, publicRegisterController.public
 // admins sin autenticación. La creación de admins se hace desde
 // POST /settings/admins (protegida por authenticateToken).
 router.post("/auth/login", authController.login);
-router.post("/auth/register", authController.createAdmin); // 🔴 Fix: esta ruta debería estar protegida, pero se deja para compatibilidad con el frontend. Mejor usar /settings/admins para crear admins  .
+router.post("/auth/register", authController.setupAdmin); // 🔴 Fix: esta ruta debería estar protegida, pero se deja para compatibilidad con el frontend. Mejor usar /settings/admins para crear admins  .
 
 // Protected Routes
 router.use(authenticateToken);
