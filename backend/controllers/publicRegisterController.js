@@ -3,7 +3,7 @@ import { supabase } from '../db.js';
 
 // ─── Validadores ──────────────────────────────────────────────────────────────
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e?.trim());
-const isValidDNI   = (d) => /^\d{6,12}$/.test(d?.trim());
+const isValidDNI   = (d) => /^\d{6,20}$/.test(d?.trim());
 const isValidName  = (n) => n?.trim().length >= 3 && n.trim().length <= 100;
 const isValidPhone = (p) => !p || /^\+?[\d\s\-()]{7,20}$/.test(p.trim());
 

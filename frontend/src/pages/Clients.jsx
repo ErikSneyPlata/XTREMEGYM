@@ -740,7 +740,7 @@ function ClientFormModal({ client, onClose, onSaved }) {
     if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()))
       e.email = 'Correo inválido.';
     if (form.dni.trim() && !/^\d{6,12}$/.test(form.dni.trim()))
-      e.dni = 'Solo dígitos, 6-12 caracteres.';
+      e.dni = 'Solo dígitos, 6-20 caracteres.';
     if (form.phone.trim() && !/^\+?[\d\s\-().]{7,20}$/.test(form.phone.trim()))
       e.phone = 'Teléfono inválido.';
     return e;

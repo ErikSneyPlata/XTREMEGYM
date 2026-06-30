@@ -1,3 +1,4 @@
+// backend/middleware/auth.js
 import jwt from 'jsonwebtoken';
 
 // 🔴 Fix: fallar en arranque si JWT_SECRET no está definido en .env
