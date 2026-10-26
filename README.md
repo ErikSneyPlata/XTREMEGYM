@@ -2,7 +2,7 @@
 
 Aplicación web de demostración para administrar la operación diaria de un gimnasio: miembros, membresías, asistencia, inventario y ventas.
 
-- **Demo:** https://xtremegym-eight.vercel.app
+- **Demo:** https://xtremegymbga.vercel.app
 - **Repositorio:** https://github.com/ErikSneyPlata/XTREMEGYM
 
 ## Qué permite hacer
